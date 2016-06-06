@@ -1,0 +1,71 @@
+﻿@model MyChicken.ViewModel.OrderViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>OrderViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+
+
+        @Html.HiddenFor(model => model.OrderDate)
+        @Html.HiddenFor(model => model.Total)
+
+
+            @foreach (var p in Model.Products)
+            {
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => p.Product.Name, new { @class = "control-label col-md-2" })
+                            <div class="col-md-2">
+                                @Html.LabelFor(model => p.Product.Name)
+                                @Html.ValidationMessageFor(model => p.Product.Name)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => p.Quantity, new { @class = "control-label col-md-3" })
+                            <div class="col-md-1">
+                                @Html.EditorFor(model => p.Quantity)
+                                @Html.ValidationMessageFor(model => p.Quantity)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => p.Product.Amount, new { @class = "control-label col-md-3" })
+                            <div class="col-md-1">
+                                @Html.EditorFor(model => p.Amount)
+                                @Html.ValidationMessageFor(model => p.Product.Amount)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

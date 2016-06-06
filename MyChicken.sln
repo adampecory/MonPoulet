@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyChicken", "MyChicken\MyChicken.csproj", "{FC2A2DD4-AF63-42D0-AAF4-569BDA744DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyChicken.Tests", "MyChicken.Tests\MyChicken.Tests.csproj", "{DF244DD3-C5FE-4E50-8FAE-8336EF65BC89}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC2A2DD4-AF63-42D0-AAF4-569BDA744DBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC2A2DD4-AF63-42D0-AAF4-569BDA744DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC2A2DD4-AF63-42D0-AAF4-569BDA744DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC2A2DD4-AF63-42D0-AAF4-569BDA744DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF244DD3-C5FE-4E50-8FAE-8336EF65BC89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF244DD3-C5FE-4E50-8FAE-8336EF65BC89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF244DD3-C5FE-4E50-8FAE-8336EF65BC89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF244DD3-C5FE-4E50-8FAE-8336EF65BC89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
