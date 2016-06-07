@@ -47,17 +47,29 @@ namespace MyChicken.Models
         public virtual Product Product { get; set; }
         public long OrderID { get; set; }
         public virtual Order Order { get; set; }
-        public int NUmber { get; set; }
+        public int Number { get; set; }
         public double Total { get; set; }
     }
 
     public class Order
     {
+        public Order()
+        {
+            OrderProduct = new List<OrderProduct>();
+        }
         public long Id { get; set; }
         public DateTime Date { get; set; }
         public double TotalAmout { get; set; }
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
         public long UserID { get; set; }
         public virtual ApplicationUser User { get; set; }
+        public Statut Statut { get; set; }
+    }
+
+    public enum Statut
+    {
+        EN_COURS = 1,
+        LIVREE,
+        ANNULEE
     }
 }

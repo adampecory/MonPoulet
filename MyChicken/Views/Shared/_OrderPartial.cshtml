@@ -1,0 +1,37 @@
+﻿@using MyChicken.Models
+@using System.Collections.Generic
+@model ICollection<OrderProduct>
+<div>
+    <table class="table table-striped">
+        <caption>Details de la commande</caption>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Montant</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Product.Name
+                    </td>
+                    
+                    <td>
+                        @item.Number
+                    </td>
+                    <td>@item.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+

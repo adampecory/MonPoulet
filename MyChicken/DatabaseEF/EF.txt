@@ -1,0 +1,3 @@
+﻿Enable-Migrations   (La base de données Existe)
+Add-Migration [NOM]  (Traduits les changements en .cs)
+Update-Database

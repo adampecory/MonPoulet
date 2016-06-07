@@ -1,4 +1,5 @@
-﻿@model MyChicken.ViewModel.OrderViewModel
+﻿@using MyChicken.ViewModel
+@model OrderViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -19,47 +20,42 @@
 
         @Html.HiddenFor(model => model.OrderDate)
         @Html.HiddenFor(model => model.Total)
-
-
-            @foreach (var p in Model.Products)
+        
+        <table class="table">
+            <caption></caption>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Product.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Products[0].Amount)
+                </th>
+            </tr>        
+            @for (var i = 0; i < Model.Products.Count; i++)
             {
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            @Html.LabelFor(model => p.Product.Name, new { @class = "control-label col-md-2" })
-                            <div class="col-md-2">
-                                @Html.LabelFor(model => p.Product.Name)
-                                @Html.ValidationMessageFor(model => p.Product.Name)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            @Html.LabelFor(model => p.Quantity, new { @class = "control-label col-md-3" })
-                            <div class="col-md-1">
-                                @Html.EditorFor(model => p.Quantity)
-                                @Html.ValidationMessageFor(model => p.Quantity)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            @Html.LabelFor(model => p.Product.Amount, new { @class = "control-label col-md-3" })
-                            <div class="col-md-1">
-                                @Html.EditorFor(model => p.Amount)
-                                @Html.ValidationMessageFor(model => p.Product.Amount)
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @*@Html.Partial("_OrderPartial", Model.Products[i])*@
+                @Html.Hidden("products.Index", (i + 10))
+                @Html.Hidden("products["+ (i + 10) +"].Id",Model.Products[i].Product.Id)
+                @Html.Hidden("products[" + (i + 10) + "].Name", Model.Products[i].Product.Name)
+                @Html.Hidden("products[" + (i + 10) + "].Amount", Model.Products[i].Product.Amount)
+                <tr>
+                    <td>@Html.DisplayFor(model => model.Products[i].Product.Name)</td>
+                    <td>@Html.TextBox("products["+ (i + 10) +"].Quantity",Model.Products[i].Quantity)</td>
+                    <td>@Html.TextBox("products["+ (i + 10) +"].Amount", Model.Products[i].Amount)</td>
+                </tr>
             }
+        </table>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
-        </div>
-    </div>
+
+</div>
 }
 
 <div>
@@ -68,4 +64,18 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function QuantityChange()
+        {
+            alert("Alert !");
+        }
+    </script>
+    @*<script>
+        $(document).ready(function () {
+            $('#p_Quantity').on("change", function () {
+                p_Amount.value = 1000;
+                alert("Change ! ");
+            });
+        });
+    </script>*@
 }
