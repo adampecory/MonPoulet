@@ -50,7 +50,8 @@ namespace MyChicken.Controllers
 
             //Construction de l'objet Order
             var model = new Order() { 
-                Date=DateTime.Now, 
+                DeliveryDate= DateTime.Now,
+                OrderDate=DateTime.Now, 
                 Statut=Statut.EN_COURS, 
                 //User=db.Users.Select(p=>p.UserName=User.Identity.Name).FirstOrDefault(), 
                 TotalAmout=lop.Sum(p=>p.Total), 

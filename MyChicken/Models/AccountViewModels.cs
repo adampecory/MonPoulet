@@ -26,6 +26,8 @@ namespace MyChicken.Models
         [Display(Name = "Confirmer le nouveau mot de passe")]
         [Compare("NewPassword", ErrorMessage = "Le nouveau mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
+
+
     }
 
     public class LoginViewModel
@@ -59,5 +61,15 @@ namespace MyChicken.Models
         [Display(Name = "Confirmer le mot de passe ")]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Numéro de Tel")]
+        [MaxLength(10)]
+        public string Tel { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [StringLength(50, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        public string Email { get; set; }
     }
 }

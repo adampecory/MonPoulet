@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using FluentValidation.Attributes;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -6,8 +7,13 @@ using System.Data.Entity;
 namespace MyChicken.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
+    [Validator(typeof(ApplicationUserValidator))]
     public class ApplicationUser : IdentityUser
     {
+
+        //public string Tel { get; set; }
+        public string Email { get; set; }
+        public string Adresse { get; set; }
     }
 
     public class ApplicationRole : IdentityRole
@@ -58,7 +64,8 @@ namespace MyChicken.Models
             OrderProduct = new List<OrderProduct>();
         }
         public long Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public double TotalAmout { get; set; }
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
         public long UserID { get; set; }
