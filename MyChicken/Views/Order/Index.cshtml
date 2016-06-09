@@ -2,10 +2,10 @@
 @model OrderViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Commandes";
 }
 
-<h2>Index</h2>
+<h2>Commandes</h2>
 
 
 @using (Html.BeginForm()) 
@@ -16,10 +16,13 @@
         <h4>OrderViewModel</h4>
         <hr />
         @Html.ValidationSummary(true)
-
-
-        @Html.HiddenFor(model => model.OrderDate)
-        @Html.HiddenFor(model => model.Total)
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.DeliveryDate, new { @class="col-md-2 control-label"})
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DeliveryDate,"{0:dd/MM/yyyy}", new { @class="form-control datepicker" })
+            </div>
+        </div>
         
         <table class="col-md-12 table table-striped">
             <caption></caption>
@@ -43,11 +46,13 @@
                 @Html.Hidden(control+"Name", Model.Products[i].Product.Name)
                 @Html.Hidden(control+"Amount", Model.Products[i].Product.Amount)
                 <tr>
-                    <td class="col-md-4">@Html.DisplayFor(model => model.Products[i].Product.Name)</td>
-                    <td class="col-md-4">@Html.TextBox(control + "Quantity", Model.Products[i].Quantity,
+                    <td>@Html.DisplayFor(model => model.Products[i].Product.Name)</td>
+                    <td>@Html.TextBox(control + "Quantity", Model.Products[i].Quantity,
                         new { @type = "number", @min = "0", @step = "1", @value = "0",  style="width:50px",
                             onkeyup = string.Format("calcul(this,'{0}','{1}')", Model.Products[i].Product.Amount, control + "QtyAmount") })</td>
-                    <td>@Html.TextBox(control + "QtyAmount", "", new { disabled = "disabled", style = "width:75px", @class = "total" })</td>
+                    <td>
+                    @Html.TextBox(control + "QtyAmount", "", new { disabled = "disabled", style = "width:75px", @class = "total" })
+                    </td>
                     
                 </tr>
             }
@@ -99,6 +104,18 @@
                     calculateSum();
                 });
             });
+            $(".datepicker").datepicker({
+                defaultDate: "+1d",
+                minDate: 1,
+                maxDate: "+1M",
+                dateFormat: 'dd/mm/yy',
+                showOtherMonths: true,
+                changeMonth: true,
+                selectOtherMonths: true,
+                required: true,
+                showOn: "focus",
+                numberOfMonths: 1
+        });
 
             function calculateSum() {
                 var sum = 0;

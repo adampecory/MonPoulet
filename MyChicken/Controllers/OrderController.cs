@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using MyChicken.Services;
 
 namespace MyChicken.Controllers
 {
@@ -15,9 +16,10 @@ namespace MyChicken.Controllers
         ApplicationDbContext db = new ApplicationDbContext();
         //
         // GET: /Order/
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            var model = new OrderViewModel();
+            var model = new OrderViewModel { DeliveryDate = DateTime.Today.AddDays(1) };
             List<Product> products = db.Products.ToList();
             foreach ( var p in products)
             {
@@ -88,21 +90,23 @@ namespace MyChicken.Controllers
 
         //
         // GET: /Order/Create
-        public ActionResult Create()
+        public ActionResult List()
         {
-            return View();
+             OrderService os = new OrderService();
+             var cdes = os.GetAllByUser(User.Identity.Name).Take(5);
+             return View(cdes);            
         }
 
         //
-        // POST: /Order/Create
+        // POST: /Order/List
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult List(FormCollection collection)
         {
             try
             {
                 // TODO: Add insert logic here
+                return RedirectToAction("List");
 
-                return RedirectToAction("Index");
             }
             catch
             {
