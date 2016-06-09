@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyChicken.Models
+namespace MyChicken.ViewModel
 {
     public class ExternalLoginConfirmationViewModel
     {
@@ -59,5 +59,18 @@ namespace MyChicken.Models
         [Display(Name = "Confirmer le mot de passe ")]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [MinLength(6,ErrorMessage="L'adresse email doit contenir au moins 6 caractères")]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        [MinLength(8, ErrorMessage="Le numéro de téléphone soit contenir au moins 8 chiffres")]
+        public string Tel { get; set; }
+
+        public string Adresse { get; set; }
+
     }
 }

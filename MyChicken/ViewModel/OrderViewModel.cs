@@ -13,6 +13,7 @@ namespace MyChicken.ViewModel
             Products = new List<OrderProductViewModel>();
         }
         public DateTime OrderDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public double Total { get; set; }
         public ApplicationUser User;
         public List<OrderProductViewModel> Products { get; set; }

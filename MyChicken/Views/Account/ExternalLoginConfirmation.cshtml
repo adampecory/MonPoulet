@@ -1,4 +1,4 @@
-﻿@model MyChicken.Models.ExternalLoginConfirmationViewModel
+﻿@model MyChicken.ViewModel.ExternalLoginConfirmationViewModel
 @{
     ViewBag.Title = "S’inscrire";
 }
@@ -16,7 +16,12 @@
         Vous avez été authentifié avec succès avec <strong>@ViewBag.LoginProvider</strong>.
             Veuillez entrer un nom d'utilisateur pour le site ci-dessous, puis cliquez sur le bouton S'enregistrer afin de compléter la
             connexion.
-    </p>
+    </p>    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
     <div class="form-group">
         @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">

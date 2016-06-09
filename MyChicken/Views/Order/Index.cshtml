@@ -21,7 +21,7 @@
         @Html.HiddenFor(model => model.OrderDate)
         @Html.HiddenFor(model => model.Total)
         
-        <table class="table">
+        <table class="col-md-12 table table-striped">
             <caption></caption>
             <tr>
                 <th>
@@ -33,20 +33,29 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Products[0].Amount)
                 </th>
-            </tr>        
+            </tr>   
             @for (var i = 0; i < Model.Products.Count; i++)
             {
+                var control = "products_" + (i + 10) + "_";
                 @*@Html.Partial("_OrderPartial", Model.Products[i])*@
-                @Html.Hidden("products.Index", (i + 10))
-                @Html.Hidden("products["+ (i + 10) +"].Id",Model.Products[i].Product.Id)
-                @Html.Hidden("products[" + (i + 10) + "].Name", Model.Products[i].Product.Name)
-                @Html.Hidden("products[" + (i + 10) + "].Amount", Model.Products[i].Product.Amount)
+                @Html.Hidden("products_Index", (i + 10))
+                @Html.Hidden(control + "Id",Model.Products[i].Product.Id)
+                @Html.Hidden(control+"Name", Model.Products[i].Product.Name)
+                @Html.Hidden(control+"Amount", Model.Products[i].Product.Amount)
                 <tr>
-                    <td>@Html.DisplayFor(model => model.Products[i].Product.Name)</td>
-                    <td>@Html.TextBox("products["+ (i + 10) +"].Quantity",Model.Products[i].Quantity)</td>
-                    <td>@Html.TextBox("products["+ (i + 10) +"].Amount", Model.Products[i].Amount)</td>
+                    <td class="col-md-4">@Html.DisplayFor(model => model.Products[i].Product.Name)</td>
+                    <td class="col-md-4">@Html.TextBox(control + "Quantity", Model.Products[i].Quantity,
+                        new { @type = "number", @min = "0", @step = "1", @value = "0",  style="width:50px",
+                            onkeyup = string.Format("calcul(this,'{0}','{1}')", Model.Products[i].Product.Amount, control + "QtyAmount") })</td>
+                    <td>@Html.TextBox(control + "QtyAmount", "", new { disabled = "disabled", style = "width:75px", @class = "total" })</td>
+                    
                 </tr>
             }
+            <tr>
+                <td>Montant Total</td>
+                <td></td>
+                <td><strong><span id="totalamount"></span></strong></td>
+            </tr>
         </table>
 
             <div class="form-group">
@@ -65,17 +74,45 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        function QuantityChange()
+        function calcul(source, amount, destination)
         {
-            alert("Alert !");
+            var objDest = document.getElementById(destination);
+            objDest.value = source.value * amount;
+            calculateSum();
+        }
+
+        function calculateSum() {
+            var sum = 0;
+            $(".total").each(function () {
+                if (!isNaN(this.value) && this.value.length != 0) {
+                    sum += parseFloat(this.value);
+                }
+            });
+            $("#totalamount").html(sum);
+            console.log(sum);
         }
     </script>
-    @*<script>
+    <script>
         $(document).ready(function () {
-            $('#p_Quantity').on("change", function () {
-                p_Amount.value = 1000;
-                alert("Change ! ");
+            $(".total").each(function () {
+                $(this).on("input propertychange paste change", function () {
+                    calculateSum();
+                });
             });
+
+            function calculateSum() {
+                var sum = 0;
+                $(".total").each(function () {
+                    if (!isNaN(this.value) && this.value.length != 0) {
+                        sum += parseFloat(this.value);
+                    }
+                });
+                $("#totalamount").html(sum);
+                console.log(sum);
+            }
+
         });
-    </script>*@
+
+       
+    </script>
 }

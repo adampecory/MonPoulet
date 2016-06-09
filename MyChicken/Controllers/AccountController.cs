@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using MyChicken.Models;
+using MyChicken.ViewModel;
 
 namespace MyChicken.Controllers
 {
@@ -78,7 +79,11 @@ namespace MyChicken.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser() { UserName = model.UserName };
+                var user = new ApplicationUser() { 
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Tel =model.Tel
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -404,5 +409,11 @@ namespace MyChicken.Controllers
             }
         }
         #endregion
+
+        public ApplicationUser GetUser(string userName)
+        {
+            return UserManager.FindByName(userName);
+        }
+
     }
 }

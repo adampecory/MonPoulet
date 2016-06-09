@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace MyChicken.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class OrderController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
@@ -29,33 +30,43 @@ namespace MyChicken.Controllers
         [HttpPost]
         public ActionResult Index(OrderViewModel orderVM, FormCollection form)
         {
-            //Construction de l'objet OrderProduct
-            var tabIndex = form["products.Index"].Split(',');
+            //Construction of product list
+            var tabIndex = form["products_Index"].Split(',');
             var lop = new List<OrderProduct>();
             foreach(var elt in tabIndex)
             {
-                var strId = form["products[" + elt + "].Id"];
+                var strId = form[string.Format("products_{0}_Id",elt)];
                 long Id = long.Parse(strId);
-                var Qte = int.Parse(form["products["+ elt +"].Quantity"]);
+                var Qte = int.Parse(form[string.Format("products_{0}_Quantity", elt)]);
                 var product = db.Products.Single(x=>x.Id==Id);
                 var op = new OrderProduct()
                 {
                     Product = product,
                     ProductID = product.Id,
                     Number = Qte,
-                    Total = product.Amount * Qte
+                    QtyAmount = product.Amount * Qte
                 };
                 lop.Add(op);
             }
 
-            //Construction de l'objet Order
+            //Construction of Order
             var model = new Order() { 
-                Date=DateTime.Now, 
-                Statut=Statut.EN_COURS, 
+                OrderDate=DateTime.Now, 
+                DeliveryDate = DateTime.Today.AddDays(1),
+                Statut=Statut.IN_PROGRESS, 
                 //User=db.Users.Select(p=>p.UserName=User.Identity.Name).FirstOrDefault(), 
-                TotalAmout=lop.Sum(p=>p.Total), 
+                TotalAmount=lop.Sum(p=>p.QtyAmount), 
                 OrderProduct=lop                  
             };
+
+            //Get Users
+            if (User.Identity.IsAuthenticated)
+            {
+                
+                var user = db.Users.First(x => x.UserName == User.Identity.Name);
+                model.User = user;
+                model.UserID = User.Identity.GetUserId();
+            }
 
             db.Orders.Add(model);
             db.SaveChanges();
