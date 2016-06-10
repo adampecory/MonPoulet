@@ -1,0 +1,76 @@
+﻿@model MyChicken.Models.Order
+
+@{
+    ViewBag.Title = "Operation";
+}
+
+<h2>Traitement d'une commande</h2>
+
+<h3>Etes vous ur de vouloir @ViewData["op"] cette commande ?</h3>
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Statut)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Statut)
+        </dd>
+
+        <dt>
+            Commentaire
+        </dt>
+
+        <dd>
+            @Html.TextAreaFor(model => model.Comment)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model=>model.Id)
+        @Html.Hidden("op", ViewData["op"]);
+        
+        <span>Commentaire : </span><br />
+        @Html.TextAreaFor(model => model.Comment)
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Valider" class="btn btn-default" />
+        </div>
+    }
+</div>

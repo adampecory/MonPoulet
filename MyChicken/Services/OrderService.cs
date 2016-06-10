@@ -13,7 +13,7 @@ namespace MyChicken.Services
         public List<Order> GetAll()
         {
             return db.Orders
-                .Where(x=>x.Statut==Statut.IN_PROGRESS)
+                //.Where(x=>x.Statut==Statut.IN_PROGRESS)
                 .ToList();
         }
 
@@ -24,5 +24,37 @@ namespace MyChicken.Services
                 .OrderByDescending(x => x.OrderDate)
                 .ToList();
         }
+
+        public List<Order> GetAll(string username)
+        {
+            return db.Orders
+                .OrderByDescending(x => x.OrderDate>=DateTime.Today)
+                .ToList();
+        }
+
+        public void MajStatut(long id, string comment, Statut statut)
+        {
+            var order = db.Orders.FirstOrDefault(x => x.Id == id);
+            if (order != null)
+            {
+                order.Comment = comment;
+                order.Statut = statut;
+                db.SaveChanges();
+            }
+        }
+
+
+        public void Supprimer(long id)
+        {
+            var order = db.Orders.FirstOrDefault(x => x.Id == id);
+            if (order != null)
+            {
+                db.Orders.Remove(order);
+                db.SaveChanges();
+            }
+        }
+
+
+
     }
 }

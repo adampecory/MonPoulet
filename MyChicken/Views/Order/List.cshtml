@@ -4,39 +4,91 @@
     ViewBag.Title = "List";
 }
 
-<h2>Liste de vos commandes dernières commandes</h2>
+<h2>Liste des commandes</h2>
 
-<p>
-    @Html.ActionLink("Nouvelle commande", "Index")
-</p>
+@using (Html.BeginForm("List","order",FormMethod.Get))
+{
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Critères de recherches
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            @Html.TextBox("deliverydate", "", new { @placeholder = "Date de Livraison (DD/MM/YYYY)", @class = "col-md-6" })<br />
+        </div>
+        <div class="row">
+            @Html.TextBox("username", "", new { @placeholder = "Login",@class="col-md-6" })
+        </div>
+     </div>
+    <div class="panel-footer">
+        <input type="submit" value="Rechercher" />
+    </div>
+</div>
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OrderDate)
+            Client
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TotalAmount)
+            Tel
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Statut)
+            Montant
         </th>
+        <th>
+            Statut
+        </th>
+        <th>
+            Date Livraison
+        </th>        
         <th>
             Détails
+        </th>
+        <th>
+            Actions
         </th>
     </tr>
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
+            @Html.DisplayFor(modelItem => item.User.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Tel)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TotalAmount)
         </td>
         <td>
             @Html.DisplayFor(modelItel=>item.Statut)
-        </td>      
+        </td>     
         <td>
-            @Html.Partial("_OrderPartial", item.OrderProduct)
+            @item.DeliveryDate.ToShortDateString()
+        </td>  
+        <td>
+            @foreach (var elt in item.OrderProduct)
+            {
+                @elt.Product.Name <span>-</span>  @elt.Number <br />
+            }
+        </td>
+        <td>
+            <a href="@Url.Action("Operation", "Order", new { id=item.Id , op="annuler"})" class="btn btn-warning">
+                Annuler
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </a>
+            <a href="@Url.Action("Operation", "Order", new { id = item.Id, op = "valider" })" class="btn btn-success">
+                Valider
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a href="@Url.Action("Operation", "Order", new { id = item.Id, op="supprimer" })" class="btn btn-danger">
+                    Supprimer
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </a>
+            }
         </td>
     </tr>
 }

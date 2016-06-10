@@ -80,86 +80,73 @@ namespace MyChicken.Controllers
         {
             return View(order);
         }
-
-        //
-        // GET: /Order/Details/5
-        public ActionResult Details(int id)
+ 
+        // GET: /Order/MyList
+        public ActionResult MyList()
         {
-            return View();
+            try
+            {
+                OrderService os = new OrderService();
+                var cdes = os.GetAllByUser(User.Identity.Name).Take(5);
+                return View(cdes);
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex);
+                return View();
+            
+            
+            }
         }
-
-        //
-        // GET: /Order/Create
-        public ActionResult List()
+        
+        [Authorize(Roles="Admin,superviseur")]
+        public ActionResult List(string username, string deliverydate)
         {
              OrderService os = new OrderService();
-             var cdes = os.GetAllByUser(User.Identity.Name).Take(5);
+             var cdes = os.GetAll();
+             if (!string.IsNullOrEmpty(username))
+                 cdes = cdes.Where(x => x.User.UserName == username).ToList();
+             if (!string.IsNullOrEmpty(deliverydate))
+                 cdes = cdes.Where(x => x.DeliveryDate.ToShortDateString() == deliverydate).ToList();
              return View(cdes);            
         }
 
-        //
-        // POST: /Order/List
-        [HttpPost]
-        public ActionResult List(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-                return RedirectToAction("List");
-
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Order/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Order/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
         // GET: /Order/Delete/5
-        public ActionResult Delete(int id)
+        [Authorize(Roles = "Admin,superviseur")]
+        public ActionResult Operation(long id, string op)
         {
-            return View();
+            var model = db.Orders.FirstOrDefault(x => x.Id == id);
+            ViewData["op"] = op;
+            return View(model);
         }
 
-        //
-        // POST: /Order/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [Authorize(Roles = "Admin,superviseur")]
+        public ActionResult Operation(long id, string op, string comment)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+            OrderService os = new OrderService();
+            var model = db.Orders.FirstOrDefault(x => x.Id == id);
+            var a = ViewData["op"];
+            switch(op)
+            { 
+                case "annuler" :
+                    os.MajStatut(id, comment, Statut.CANCELLED);
+                    break;
+                case "valider" :
+                    os.MajStatut(id, comment, Statut.VALIDATED);
+                    break;
+                case "livrer":
+                    os.MajStatut(id, comment, Statut.DELIVERED);
+                    break;
+                case "supprimer" :
+                    os.Supprimer(id);
+                    break;
+                default : 
+                    break;
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("List");
         }
+
+
     }
 }
