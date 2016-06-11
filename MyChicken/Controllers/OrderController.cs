@@ -7,11 +7,12 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MyChicken.Services;
+using log4net;
 
 namespace MyChicken.Controllers
 {
     [Authorize]
-    public class OrderController : Controller
+    public class OrderController : BaseController
     {
         ApplicationDbContext db = new ApplicationDbContext();
         //
@@ -20,10 +21,18 @@ namespace MyChicken.Controllers
         public ActionResult Index()
         {
             var model = new OrderViewModel { DeliveryDate = DateTime.Today.AddDays(1) };
-            List<Product> products = db.Products.ToList();
-            foreach ( var p in products)
+            try
             {
-                model.Products.Add(new OrderProductViewModel { Product = p, Amount=0, Quantity=0 });
+                List<Product> products = db.Products.ToList();
+                foreach ( var p in products)
+                {
+                    model.Products.Add(new OrderProductViewModel { Product = p, Amount=0, Quantity=0 });
+                }
+                Trace("Affichage page Commande OK",TraceLevel.Debug);
+            }
+            catch (Exception ex)
+            {
+                Trace("Erreur affichage page Commande",TraceLevel.Fatal, ex);
             }
             return View(model);
         }
@@ -32,6 +41,7 @@ namespace MyChicken.Controllers
         [HttpPost]
         public ActionResult Index(OrderViewModel orderVM, FormCollection form)
         {
+            Trace("Debut enregistrement commande", TraceLevel.Debug);
             //Construction of product list
             var tabIndex = form["products_Index"].Split(',');
             var lop = new List<OrderProduct>();
@@ -73,6 +83,7 @@ namespace MyChicken.Controllers
             db.Orders.Add(model);
             db.SaveChanges();
 
+            Trace("Fin Enregistrement Commande", TraceLevel.Debug);
             return View("Summary", model);
         }
 
