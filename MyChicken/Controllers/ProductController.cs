@@ -10,7 +10,7 @@ using MyChicken.Models;
 
 namespace MyChicken.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -52,6 +52,7 @@ namespace MyChicken.Controllers
             {
                 db.Products.Add(product);
                 db.SaveChanges();
+                Trace("New product created : " + product.Name, TraceLevel.Info);
                 return RedirectToAction("Index");
             }
 
@@ -84,6 +85,7 @@ namespace MyChicken.Controllers
             {
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
+                Trace("Product updated : " + product.Name, TraceLevel.Info);
                 return RedirectToAction("Index");
             }
             return View(product);
@@ -112,6 +114,7 @@ namespace MyChicken.Controllers
             Product product = db.Products.Find(id);
             db.Products.Remove(product);
             db.SaveChanges();
+            Trace("Product deleted : " + product.Name, TraceLevel.Info);
             return RedirectToAction("Index");
         }
 

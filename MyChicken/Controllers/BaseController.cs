@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace MyChicken.Controllers
 {
+    [HandleError]  
     public class BaseController : Controller
     {
 

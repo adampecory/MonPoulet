@@ -11,7 +11,7 @@ using System.Web.Mvc;
 namespace MyChicken.Controllers
 {
     [Authorize(Roles="Admin")]
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         ApplicationDbContext context = new ApplicationDbContext();
         // GET: Admin
@@ -22,7 +22,6 @@ namespace MyChicken.Controllers
 
         public ActionResult CreateAdminUser()
         {
-
 
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var RoleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
@@ -49,7 +48,7 @@ namespace MyChicken.Controllers
                 var userResult = UserManager.Create(user, "Azerty1+");
                 UserManager.AddToRole(context.Users.First(x => x.UserName == "admin").Id, "Admin");
             }
-
+            Trace("User Admin Created", TraceLevel.Info);
             return Content("Creation Admin OK");
         }
 
@@ -72,11 +71,12 @@ namespace MyChicken.Controllers
                     if (!userPower.Suppression)
                     {
                         UserManager.AddToRole(user.Id,userPower.Rolename);
-
+                        Trace(userPower.Rolename + " role added to" + user.UserName, TraceLevel.Info);
                     }
                     else
                     {
                         UserManager.RemoveFromRole(user.Id, userPower.Rolename);
+                        Trace(userPower.Rolename + " role removed from" + user.UserName, TraceLevel.Info);
                     }
                     return RedirectToAction("ManageSupervisor");
                 }

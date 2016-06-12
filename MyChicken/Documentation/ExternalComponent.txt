@@ -1,0 +1,58 @@
+﻿Extrenal Tools
+
+JQUERY UI (installed with NugetMagager)
+Installed for datepicker. 
+ASP.NET dont provide control for date and HTML5 date is not compatible with old browser.
+This package install 
+1- image & css in Content/themes/base/image
+2- jquery-ui-1.11.4
+Creation of bundle in BundleConfig
+  bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+            "~/Scripts/jquery-ui-{version}.js"));
+Use of this bundle in _Layout for all pages
+  @Scripts.Render("~/bundles/jqueryui")
+Add all css in bundle content css already use in _Layout
+            bundles.Add(new StyleBundle("~/Content/css")
+                .Include("~/Content/bootstrap.css","~/Content/site.css")
+                .IncludeDirectory("~/content/themes/base/","*.css",false));
+
+
+LOG4NET (installed with NugetMagager)
+Installed for application logs
+
+Separate Config file was created in /Config/log4net.config
+	<?xml version="1.0"?>
+	<configuration>
+	  <configSections>
+		<section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler,log4net" />
+	  </configSections>
+	  <log4net>
+		<appender name="RollingFile" type="log4net.Appender.RollingFileAppender">
+		  <file value="Logs/" />
+		  <rollingStyle value="Date"/>
+		  <staticLogFileName value="false" />
+		  <datePattern value="yyyyMMdd'.Chicken.log'" />
+		  <appendToFile value="true" />
+		  <maximumFileSize value="500KB" />
+		  <maxSizeRollBackups value="2" />
+		  <layout type="log4net.Layout.PatternLayout">
+			<conversionPattern value="%date %level %logger - %message%newline" />
+		  </layout>
+		</appender>
+		<root>
+		  <level value="All" />
+		  <appender-ref ref="RollingFile" />
+		</root>
+	  </log4net>
+	</configuration>
+
+references this config file in web.config
+    ...
+    <add key="log4net.config" value="Config\log4net.config" />
+  </appSettings>
+
+Add this line in web.config (Not necessary, xork without)
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "log4net.config", Watch = true)]
+
+Add this line in a BaseController for full disponibility
+protected static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

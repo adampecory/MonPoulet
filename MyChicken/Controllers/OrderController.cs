@@ -28,11 +28,11 @@ namespace MyChicken.Controllers
                 {
                     model.Products.Add(new OrderProductViewModel { Product = p, Amount=0, Quantity=0 });
                 }
-                Trace("Affichage page Commande OK",TraceLevel.Debug);
+                Trace("Order page showed",TraceLevel.Debug);
             }
             catch (Exception ex)
             {
-                Trace("Erreur affichage page Commande",TraceLevel.Fatal, ex);
+                Trace("Order page show error",TraceLevel.Fatal, ex);
             }
             return View(model);
         }
@@ -41,7 +41,7 @@ namespace MyChicken.Controllers
         [HttpPost]
         public ActionResult Index(OrderViewModel orderVM, FormCollection form)
         {
-            Trace("Debut enregistrement commande", TraceLevel.Debug);
+            Trace("Begin new order saving", TraceLevel.Debug);
             //Construction of product list
             var tabIndex = form["products_Index"].Split(',');
             var lop = new List<OrderProduct>();
@@ -83,7 +83,7 @@ namespace MyChicken.Controllers
             db.Orders.Add(model);
             db.SaveChanges();
 
-            Trace("Fin Enregistrement Commande", TraceLevel.Debug);
+            Trace("End order saving", TraceLevel.Debug);
             return View("Summary", model);
         }
 
@@ -99,6 +99,7 @@ namespace MyChicken.Controllers
             {
                 OrderService os = new OrderService();
                 var cdes = os.GetAllByUser(User.Identity.Name).Take(5);
+                Trace("User last five order showed", TraceLevel.Info);
                 return View(cdes);
             }
             catch(Exception ex)
@@ -119,6 +120,7 @@ namespace MyChicken.Controllers
                  cdes = cdes.Where(x => x.User.UserName == username).ToList();
              if (!string.IsNullOrEmpty(deliverydate))
                  cdes = cdes.Where(x => x.DeliveryDate.ToShortDateString() == deliverydate).ToList();
+             Trace("All users order showed", TraceLevel.Info);
              return View(cdes);            
         }
 
@@ -155,6 +157,8 @@ namespace MyChicken.Controllers
                 default : 
                     break;
             }
+            Trace("Order "+id+" statut updated : " + op , TraceLevel.Info);
+
             return RedirectToAction("List");
         }
 

@@ -164,7 +164,9 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Global.asax.cs">
@@ -236,7 +238,8 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="DatabaseEF\EF.txt" />
+    <Content Include="Documentation\EF.txt" />
+    <Content Include="Documentation\ExternalComponent.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -296,6 +299,7 @@
     <Content Include="Views\Admin\ManageSupervisor.cshtml" />
     <Content Include="Views\Order\MyList.cshtml" />
     <Content Include="Views\Order\Operation.cshtml" />
+    <Content Include="Views\Shared\FileNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

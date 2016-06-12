@@ -14,7 +14,7 @@ using MyChicken.ViewModel;
 namespace MyChicken.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
@@ -34,7 +34,9 @@ namespace MyChicken.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            Trace("Page de connexion", TraceLevel.Debug);
             return View();
+
         }
 
         //
@@ -50,10 +52,12 @@ namespace MyChicken.Controllers
                 if (user != null)
                 {
                     await SignInAsync(user, model.RememberMe);
+                    Trace("Connexion User " + user.UserName + "OK", TraceLevel.Info);
                     return RedirectToLocal(returnUrl);
                 }
                 else
                 {
+                    Trace("Connexion refusée " + model.UserName,TraceLevel.Info);
                     ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
@@ -88,6 +92,7 @@ namespace MyChicken.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
+                    Trace("Création nouvel utilisateur", TraceLevel.Info);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -410,10 +415,6 @@ namespace MyChicken.Controllers
         }
         #endregion
 
-        public ApplicationUser GetUser(string userName)
-        {
-            return UserManager.FindByName(userName);
-        }
 
     }
 }
