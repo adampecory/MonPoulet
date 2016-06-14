@@ -19,7 +19,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.DeliveryDate, new { @class="col-md-2 control-label"})
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.DeliveryDate,"{0:dd/MM/yyyy}", new { @class="form-control datepicker" })
+                @Html.TextBoxFor(model => model.DeliveryDate,"{0:yyyy/MM/dd}", new { @class="form-control datepicker" })
             </div>
         </div>
         

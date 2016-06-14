@@ -15,6 +15,8 @@ namespace MyChicken.Controllers
     public class OrderController : BaseController
     {
         ApplicationDbContext db = new ApplicationDbContext();
+        OrderService os = new OrderService();
+        ProductService ps = new ProductService();
         //
         // GET: /Order/
         [AllowAnonymous]
@@ -41,6 +43,7 @@ namespace MyChicken.Controllers
         [HttpPost]
         public ActionResult Index(OrderViewModel orderVM, FormCollection form)
         {
+            
             Trace("Begin new order saving", TraceLevel.Debug);
             //Construction of product list
             var tabIndex = form["products_Index"].Split(',');
@@ -50,7 +53,7 @@ namespace MyChicken.Controllers
                 var strId = form[string.Format("products_{0}_Id",elt)];
                 long Id = long.Parse(strId);
                 var Qte = int.Parse(form[string.Format("products_{0}_Quantity", elt)]);
-                var product = db.Products.Single(x=>x.Id==Id);
+                var product = ps.getbyId(Id);
                 var op = new OrderProduct()
                 {
                     Product = product,
@@ -61,31 +64,14 @@ namespace MyChicken.Controllers
                 lop.Add(op);
             }
 
-            //Construction of Order
-            var model = new Order() { 
-                OrderDate=DateTime.Now, 
-                DeliveryDate = DateTime.Today.AddDays(1),
-                Statut=Statut.IN_PROGRESS, 
-                //User=db.Users.Select(p=>p.UserName=User.Identity.Name).FirstOrDefault(), 
-                TotalAmount=lop.Sum(p=>p.QtyAmount), 
-                OrderProduct=lop                  
-            };
-
-            //Get Users
-            if (User.Identity.IsAuthenticated)
-            {
-                
-                var user = db.Users.First(x => x.UserName == User.Identity.Name);
-                model.User = user;
-                model.UserID = User.Identity.GetUserId();
-            }
-
-            db.Orders.Add(model);
-            db.SaveChanges();
+            var model = os.CreateOrder(lop, User.Identity.Name);
+            //os.Add(model);
 
             Trace("End order saving", TraceLevel.Debug);
             return View("Summary", model);
         }
+
+
 
         public ActionResult Summary(Order order)
         {
@@ -152,7 +138,7 @@ namespace MyChicken.Controllers
                     os.MajStatut(id, comment, Statut.DELIVERED);
                     break;
                 case "supprimer" :
-                    os.Supprimer(id);
+                    os.Delete(id);
                     break;
                 default : 
                     break;
