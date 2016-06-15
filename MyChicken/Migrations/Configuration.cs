@@ -60,7 +60,7 @@ namespace MyChicken.Migrations
             if (!context.Products.Any())
             {
                 context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 4000 });
-                context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 5000 });
+                context.Products.Add(new Product { Name = "Poulet 2.5Kg", Amount = 5000 });
                 context.SaveChanges();
             }
 
