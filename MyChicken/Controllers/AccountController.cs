@@ -93,7 +93,7 @@ namespace MyChicken.Controllers
                 {
                     await SignInAsync(user, isPersistent: false);
                     Trace("Création nouvel utilisateur", TraceLevel.Info);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Order");
                 }
                 else
                 {
@@ -300,7 +300,7 @@ namespace MyChicken.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Order");
         }
 
         //
@@ -382,7 +382,7 @@ namespace MyChicken.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Order");
             }
         }
 

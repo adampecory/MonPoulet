@@ -56,7 +56,7 @@ namespace MyChicken.Controllers
                 var product = ps.getbyId(Id);
                 var op = new OrderProduct()
                 {
-                    Product = product,
+                    //Product = product,
                     ProductID = product.Id,
                     Number = Qte,
                     QtyAmount = product.Amount * Qte

@@ -13,6 +13,8 @@ namespace MyChicken.ViewModel
         {
             Products = new List<OrderProductViewModel>();
         }
+
+        [Display(Name = "Date commande")]
         public DateTime OrderDate { get; set; }
         [Required]
         [Display(Name="Date de retrait/livraison")]

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace MyChicken.Services
 {
@@ -13,10 +14,13 @@ namespace MyChicken.Services
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
+                var date = DateTime.Today.AddDays(-1.0);
                 return db.Orders
-                    //.Where(x=>x.Statut==Statut.IN_PROGRESS)
+                    .Include(x => x.User)
+                    .Include(y => y.OrderProduct.Select(p => p.Product))
+                    .OrderByDescending(x => x.DeliveryDate)
+                    .Where(x=>x.DeliveryDate>=date)
                     .ToList();
-
             }
         }
 
@@ -25,6 +29,8 @@ namespace MyChicken.Services
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
             return db.Orders
+                .Include(x=>x.User)
+                .Include(y=>y.OrderProduct.Select(p=>p.Product))
                 .Where(x => x.Statut == Statut.IN_PROGRESS && x.User.UserName==username)
                 .OrderByDescending(x => x.OrderDate)
                 .ToList();
@@ -36,6 +42,8 @@ namespace MyChicken.Services
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 return db.Orders
+                    .Include(x => x.User)
+                    .Include(y => y.OrderProduct.Select(p => p.Product))
                     .OrderByDescending(x => x.OrderDate >= DateTime.Today)
                     .ToList();
             }
@@ -83,6 +91,10 @@ namespace MyChicken.Services
             //Construction of Order
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
+                foreach(var elt in lop)
+                {
+                    elt.Product = db.Products.FirstOrDefault(x => x.Id == elt.ProductID);
+                }
                 var model = new Order()
                 {
                     OrderDate = DateTime.Now,
@@ -93,7 +105,7 @@ namespace MyChicken.Services
                     TotalAmount = lop.Sum(p => p.QtyAmount),
                     OrderProduct = lop
                 };
-
+                
                 db.Orders.Add(model);
                 db.SaveChanges();
                 SendMail(model);

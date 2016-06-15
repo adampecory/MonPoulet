@@ -12,37 +12,17 @@
     <div>
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.DeliveryDate)
+                Date de livraison
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.DeliveryDate)
             </dd>
-
             <dt>
-                @Html.DisplayNameFor(model => model.TotalAmount)
+                Montant total
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.TotalAmount)
             </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.UserID)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.UserID)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Statut)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Statut)
-            </dd>
-
         </dl>
     </div>
     <div>
@@ -50,6 +30,5 @@
     </div>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Mes Commandes", "MyList")
 </p>
