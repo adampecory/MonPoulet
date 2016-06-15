@@ -10,6 +10,7 @@ using MyChicken.Models;
 
 namespace MyChicken.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class ProductController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();

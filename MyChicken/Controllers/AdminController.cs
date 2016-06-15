@@ -20,6 +20,7 @@ namespace MyChicken.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult CreateAdminUser()
         {
 
@@ -47,6 +48,13 @@ namespace MyChicken.Controllers
                 };
                 var userResult = UserManager.Create(user, "Azerty1+");
                 UserManager.AddToRole(context.Users.First(x => x.UserName == "admin").Id, "Admin");
+            }
+
+            if (!context.Products.Any())
+            {
+                context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 4000 });
+                context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 5000 });
+                context.SaveChanges();
             }
             Trace("User Admin Created", TraceLevel.Info);
             return Content("Creation Admin OK");

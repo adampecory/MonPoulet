@@ -45,7 +45,7 @@ namespace MyChicken.Migrations
                 roleResult = RoleManager.Create(new IdentityRole("Superviseur"));
             }
 
-            if (context.Users.Any(x=>x.UserName=="admin"))
+            if (!context.Users.Any(x=>x.UserName=="admin"))
             {
                 ApplicationUser user = new ApplicationUser
                 {
@@ -55,6 +55,13 @@ namespace MyChicken.Migrations
                 };
                 var userResult = UserManager.Create(user, "Azerty1+");
                 UserManager.AddToRole(context.Users.First(x=>x.UserName=="admin").Id,"Admin");
+            }
+
+            if (!context.Products.Any())
+            {
+                context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 4000 });
+                context.Products.Add(new Product { Name = "Poulet 2Kg", Amount = 5000 });
+                context.SaveChanges();
             }
 
         }

@@ -1,0 +1,19 @@
+﻿@model MyChicken.ViewModel.LogViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Log Viawer</h2>
+
+<div>
+    <table>
+        @foreach (var elt in Model.Content)
+        {
+            <tr>
+                <td>@elt</td>
+            </tr>
+        }        
+    </table>
+
+</div>
+
