@@ -53,7 +53,7 @@ namespace MyChicken.Controllers
                 var strId = form[string.Format("products_{0}_Id",elt)];
                 long Id = long.Parse(strId);
                 var Qte = int.Parse(form[string.Format("products_{0}_Quantity", elt)]);
-                var product = ps.getbyId(Id);
+                var product = ps.GetbyId(Id);
                 var op = new OrderProduct()
                 {
                     //Product = product,

@@ -7,28 +7,34 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyChicken.Models;
+using MyChicken.Services;
+using AutoMapper;
+using MyChicken.ViewModel;
 
 namespace MyChicken.Controllers
 {
     [Authorize(Roles="Admin")]
     public class ProductController : BaseController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        ProductService ps = new ProductService();
 
         // GET: /Product/
         public ActionResult Index()
         {
-            return View(db.Products.ToList());
+            var data = ps.GetAll();
+            List<ProductViewModel> model = new List<ProductViewModel>();
+            data.ForEach(x=>model.Add(Tools.Mapping<Product, ProductViewModel>.DefautMapping(x)));
+            return View(model);
         }
 
         // GET: /Product/Details/5
-        public ActionResult Details(long? id)
+        public ActionResult Details(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = ps.GetbyId(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -47,12 +53,16 @@ namespace MyChicken.Controllers
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Name,Image,Amount,IsArchived")] Product product)
+        public ActionResult Create([Bind(Include="Id,Name,Image,Amount,IsArchived")] ProductViewModel product)
         {
+            //var config = new MapperConfiguration(cfg => cfg.CreateMap<ProductViewModel, Product>());
+            //var mapper = config.CreateMapper();
+            //Product model = mapper.Map<Product>(product);
+            var model = Tools.Mapping<ProductViewModel, Product>.DefautMapping(product);
+
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
-                db.SaveChanges();
+                ps.Add(model);
                 Trace("New product created : " + product.Name, TraceLevel.Info);
                 return RedirectToAction("Index");
             }
@@ -60,14 +70,16 @@ namespace MyChicken.Controllers
             return View(product);
         }
 
+
+
         // GET: /Product/Edit/5
-        public ActionResult Edit(long? id)
+        public ActionResult Edit(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = ps.GetbyId(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -84,8 +96,7 @@ namespace MyChicken.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                ps.Update(product);
                 Trace("Product updated : " + product.Name, TraceLevel.Info);
                 return RedirectToAction("Index");
             }
@@ -93,13 +104,13 @@ namespace MyChicken.Controllers
         }
 
         // GET: /Product/Delete/5
-        public ActionResult Delete(long? id)
+        public ActionResult Delete(long id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = ps.GetbyId(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -112,20 +123,9 @@ namespace MyChicken.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            Trace("Product deleted : " + product.Name, TraceLevel.Info);
+            ps.Delete(id);
+            Trace("Product deleted : " + id, TraceLevel.Info);
             return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

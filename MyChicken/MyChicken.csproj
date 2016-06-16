@@ -39,6 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -209,6 +212,7 @@
     <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Tools\Mapping.cs" />
     <Compile Include="ViewModel\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -216,6 +220,7 @@
     <Compile Include="ViewModel\AdminViewModel.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\OrderViewModel.cs" />
+    <Compile Include="ViewModel\ProductViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -303,7 +308,6 @@
     <Content Include="Views\Product\Delete.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
-    <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Shared\_OrderPartial.cshtml" />
     <Content Include="Views\Order\Summary.cshtml" />
@@ -314,6 +318,7 @@
     <Content Include="Views\Order\Operation.cshtml" />
     <Content Include="Views\Shared\FileNotFound.cshtml" />
     <Content Include="Views\Log\Index.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
