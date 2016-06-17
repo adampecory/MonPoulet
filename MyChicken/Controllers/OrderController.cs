@@ -84,16 +84,14 @@ namespace MyChicken.Controllers
             try
             {
                 OrderService os = new OrderService();
-                var cdes = os.GetAllByUser(User.Identity.Name).Take(5);
-                Trace("User last five order showed", TraceLevel.Info);
+                var cdes = os.GetMyList(User.Identity.Name).Take(10);
+                Trace("User last ten order showed", TraceLevel.Info);
                 return View(cdes);
             }
             catch(Exception ex)
             {
                 ModelState.AddModelError("", ex);
                 return View();
-            
-            
             }
         }
         
@@ -129,13 +127,13 @@ namespace MyChicken.Controllers
             switch(op)
             { 
                 case "annuler" :
-                    os.MajStatut(id, comment, Statut.CANCELLED);
+                    os.MajStatut(id, comment, Statut.ANNULE);
                     break;
                 case "valider" :
-                    os.MajStatut(id, comment, Statut.VALIDATED);
+                    os.MajStatut(id, comment, Statut.VALIDE);
                     break;
                 case "livrer":
-                    os.MajStatut(id, comment, Statut.DELIVERED);
+                    os.MajStatut(id, comment, Statut.LIVRE);
                     break;
                 case "supprimer" :
                     os.Delete(id);

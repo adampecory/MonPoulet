@@ -45,9 +45,9 @@ namespace MyChicken.Models
 
     public enum Statut
     {
-        IN_PROGRESS = 1,
-        VALIDATED,
-        DELIVERED,
-        CANCELLED
+        EN_COURS = 1,
+        VALIDE,
+        LIVRE,
+        ANNULE
     }
 }

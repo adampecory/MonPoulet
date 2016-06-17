@@ -1,45 +1,35 @@
-﻿@model IEnumerable<MyChicken.Models.Order>
-
+﻿@model IEnumerable<MyChicken.ViewModel.MyListViewModel>
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "Mes commandes";
 }
 
 <h2>Liste de vos commandes dernières commandes</h2>
-
+<hr />
 <p>
     @Html.ActionLink("Nouvelle commande", "Index")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            Date de commande
-        </th>
-        <th>
-            Total
-        </th>
-        <th>
-            Statut
-        </th>
-        <th>
-            Détails
-        </th>
-    </tr>
+<div class="row">
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItel => item.Statut)
-            </td>
-            <td>
-                @Html.Partial("_OrderPartial", item.OrderProduct)
-            </td>            
-        </tr>
-    }
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="panel panel-default">
+                <table class="table table-bordered table-striped">
+                    <tr><td>Date Commande</td><td>@item.OrderDate.ToShortDateString()</td></tr>
+                    <tr><td>Date Livraison</td><td>@item.DeliveryDate.ToShortDateString()</td></tr>
+                    <tr><td>Total</td><td>@item.Total</td></tr>
+                    <tr><td>Statut</td><td>@item.Statut</td></tr>
+                    <tr>
+                        <td>Détails</td>
+                        <td>
+                                @foreach (var str in item.Details)
+                                {
+                                    <div>@str</div>
+                                }
 
-</table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</div>

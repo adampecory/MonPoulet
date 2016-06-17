@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
+using MyChicken.ViewModel;
 
 namespace MyChicken.Services
 {
@@ -31,7 +32,7 @@ namespace MyChicken.Services
             return db.Orders
                 .Include(x=>x.User)
                 .Include(y=>y.OrderProduct.Select(p=>p.Product))
-                .Where(x => x.Statut == Statut.IN_PROGRESS && x.User.UserName==username)
+                .Where(x => x.Statut == Statut.EN_COURS && x.User.UserName==username)
                 .OrderByDescending(x => x.OrderDate)
                 .ToList();
             }
@@ -99,7 +100,7 @@ namespace MyChicken.Services
                 {
                     OrderDate = DateTime.Now,
                     DeliveryDate = DateTime.Today.AddDays(1),
-                    Statut = Statut.IN_PROGRESS,
+                    Statut = Statut.EN_COURS,
                     User = db.Users.First(x => x.UserName == Username),
                     UserID = db.Users.First(x => x.UserName == Username).Id,
                     TotalAmount = lop.Sum(p => p.QtyAmount),
@@ -112,7 +113,6 @@ namespace MyChicken.Services
                 return model;
             }
         }
-
 
         private void SendMail(Order order)
         {
@@ -127,7 +127,36 @@ namespace MyChicken.Services
             es.Sendmail(mail);
         }
 
+        public List<MyListViewModel> GetMyList(string username)
+        {
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var list = new List<MyListViewModel>();
+                var orders = db.Orders
+                    .Include(x=>x.User)
+                    .Include(x=>x.OrderProduct.Select(p=>p.Product))
+                    .Where(x => x.User.UserName == username).ToList();
 
+                foreach (Order elt in orders)
+                {
+                    var details = "";
+                    elt.OrderProduct.ToList().ForEach(x=>details += x.Number + " - " + x.Product.Name + ";");
+                    var vm = new MyListViewModel
+                    {
+                        OrderId = elt.Id,
+                        Username = username,
+                        OrderDate = elt.OrderDate,
+                        DeliveryDate = elt.DeliveryDate,
+                        Statut = elt.Statut,
+                        Total = elt.TotalAmount, 
+                        Details = details.Split(';').ToList()
+                    };
+                    list.Add(vm);
+                }
+                return list;
+                                
+            }
+        }
 
     }
 }
