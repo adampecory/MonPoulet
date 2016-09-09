@@ -10,18 +10,34 @@
     <h4>Commande</h4>
     <hr />
     <div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                Date de livraison
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                @Model.DeliveryDate.ToShortDateString()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                Montant Total
+            </div>
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                @Model.TotalAmount.ToString("### ###")
+            </div>
+        </div>
         <dl class="dl-horizontal">
             <dt>
                 Date de livraison
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.DeliveryDate)
+                @Model.DeliveryDate.ToShortDateString()
             </dd>
             <dt>
                 Montant total
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.TotalAmount)
+                @Model.TotalAmount.ToString("### ###")
             </dd>
         </dl>
     </div>

@@ -82,13 +82,6 @@
                 Valider
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </a>
-            @if (User.IsInRole("Admin"))
-            {
-                <a href="@Url.Action("Operation", "Order", new { id = item.Id, op="supprimer" })" class="btn btn-danger">
-                    Supprimer
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </a>
-            }
         </td>
     </tr>
 }

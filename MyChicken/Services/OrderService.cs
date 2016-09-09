@@ -38,6 +38,18 @@ namespace MyChicken.Services
             }
         }
 
+        public Order GetOrderbyId(long id)
+        {
+            using(ApplicationDbContext db = new ApplicationDbContext())
+            {
+                return db.Orders
+                    .Include(x => x.User)
+                    .Include(y => y.OrderProduct.Select(p => p.Product))
+                    .Where(x => x.Id == id)
+                    .FirstOrDefault();
+            }            
+        }
+
         public List<Order> GetAll(string username)
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
@@ -87,7 +99,7 @@ namespace MyChicken.Services
             }
         }
 
-        public Order CreateOrder(List<OrderProduct> lop,string Username="")
+        public Order CreateOrder(List<OrderProduct> lop,string Username, DateTime deliveryDate)
         {
             //Construction of Order
             using (ApplicationDbContext db = new ApplicationDbContext())
@@ -99,7 +111,7 @@ namespace MyChicken.Services
                 var model = new Order()
                 {
                     OrderDate = DateTime.Now,
-                    DeliveryDate = DateTime.Today.AddDays(1),
+                    DeliveryDate = deliveryDate,
                     Statut = Statut.EN_COURS,
                     User = db.Users.First(x => x.UserName == Username),
                     UserID = db.Users.First(x => x.UserName == Username).Id,
@@ -135,7 +147,9 @@ namespace MyChicken.Services
                 var orders = db.Orders
                     .Include(x=>x.User)
                     .Include(x=>x.OrderProduct.Select(p=>p.Product))
-                    .Where(x => x.User.UserName == username).ToList();
+                    .Where(x => x.User.UserName == username)
+                    .OrderByDescending(x=>x.DeliveryDate)
+                    .ToList();
 
                 foreach (Order elt in orders)
                 {

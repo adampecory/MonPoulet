@@ -6,8 +6,15 @@
 
 <h2>Traitement d'une commande</h2>
 
-<h3>Etes vous ur de vouloir @ViewData["op"] cette commande ?</h3>
+<h3>Etes vous sur de vouloir @ViewData["op"] cette commande ?</h3>
 <div>
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model=>model.Id)
+        @Html.Hidden("op", ViewData["op"]);
+
     <h4>Order</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -60,14 +67,6 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(model=>model.Id)
-        @Html.Hidden("op", ViewData["op"]);
-        
-        <span>Commentaire : </span><br />
-        @Html.TextAreaFor(model => model.Comment)
 
         <div class="form-actions no-color">
             <input type="submit" value="Valider" class="btn btn-default" />

@@ -25,7 +25,7 @@ namespace MyChicken.Controllers
             var model = new OrderViewModel { DeliveryDate = DateTime.Today.AddDays(1) };
             try
             {
-                List<Product> products = db.Products.ToList();
+                List<Product> products = db.Products.Where(x=>x.IsArchived==false).ToList();
                 foreach ( var p in products)
                 {
                     model.Products.Add(new OrderProductViewModel { Product = p, Amount=0, Quantity=0 });
@@ -64,17 +64,19 @@ namespace MyChicken.Controllers
                 lop.Add(op);
             }
 
-            var model = os.CreateOrder(lop, User.Identity.Name);
+            var model = os.CreateOrder(lop, User.Identity.Name, orderVM.DeliveryDate);
             //os.Add(model);
 
             Trace("End order saving", TraceLevel.Debug);
-            return View("Summary", model);
+            TempData["order"] = model;
+            return Redirect(Url.Action("summary",model));
         }
 
 
 
-        public ActionResult Summary(Order order)
+        public ActionResult Summary(Order model)
         {
+            var order = (Order)TempData["order"];
             return View(order);
         }
  
@@ -142,7 +144,6 @@ namespace MyChicken.Controllers
                     break;
             }
             Trace("Order "+id+" statut updated : " + op , TraceLevel.Info);
-
             return RedirectToAction("List");
         }
 
