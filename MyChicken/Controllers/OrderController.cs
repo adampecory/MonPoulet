@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MyChicken.Services;
 using log4net;
+using System.Globalization;
 
 namespace MyChicken.Controllers
 {
@@ -105,7 +106,13 @@ namespace MyChicken.Controllers
              if (!string.IsNullOrEmpty(username))
                  cdes = cdes.Where(x => x.User.UserName == username).ToList();
              if (!string.IsNullOrEmpty(deliverydate))
-                 cdes = cdes.Where(x => x.DeliveryDate.ToShortDateString() == deliverydate).ToList();
+             {
+                 DateTime dt;
+                 if (DateTime.TryParseExact(deliverydate, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+                 {
+                     cdes = cdes.Where(x => x.DeliveryDate >= dt).ToList();
+                 }
+             }
              Trace("All users order showed", TraceLevel.Info);
              return View(cdes);            
         }
