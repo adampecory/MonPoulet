@@ -70,14 +70,16 @@ namespace MyChicken.Controllers
 
             Trace("End order saving", TraceLevel.Debug);
             TempData["order"] = model;
-            return Redirect(Url.Action("summary",model));
+            return RedirectToAction("summary");
         }
 
 
 
-        public ActionResult Summary(Order model)
+        public ActionResult Summary()
         {
-            var order = (Order)TempData["order"];
+            var order = new Order();
+            var data = (Order)TempData["order"];
+            order = data != null ? data : order;
             return View(order);
         }
  

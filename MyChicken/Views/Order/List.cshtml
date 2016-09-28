@@ -65,7 +65,7 @@
             @Html.DisplayFor(modelItel=>item.Statut)
         </td>     
         <td>
-            @item.DeliveryDate.ToShortDateString()
+            @string.Format("{0:d}",item.DeliveryDate)
         </td>  
         <td>
             @foreach (var elt in item.OrderProduct)

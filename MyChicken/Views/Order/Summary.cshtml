@@ -15,7 +15,7 @@
                 Date de livraison
             </div>
             <div class="col-xs-6 col-sm-4 col-md-3">
-                @Model.DeliveryDate.ToShortDateString()
+                @Model.DeliveryDate.ToString("dd'/'MM'/'yyyy")
             </div>
         </div>
         <div class="row">
@@ -26,20 +26,6 @@
                 @Model.TotalAmount.ToString("### ###")
             </div>
         </div>
-        <dl class="dl-horizontal">
-            <dt>
-                Date de livraison
-            </dt>
-            <dd>
-                @Model.DeliveryDate.ToShortDateString()
-            </dd>
-            <dt>
-                Montant total
-            </dt>
-            <dd>
-                @Model.TotalAmount.ToString("### ###")
-            </dd>
-        </dl>
     </div>
     <div>
         @Html.Partial("_OrderPartial",Model.OrderProduct)
